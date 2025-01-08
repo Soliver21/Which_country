@@ -1,5 +1,8 @@
 let data = "";
-let currentCountryName = ""; 
+let currentCountryName = "";
+let timer = 120;  // Timer változó globálisan deklarálva
+let time;  // time változó, ami a setInterval referencia lesz
+let score = 0;  // Score változó deklarálva
 
 async function sendRequest() {
     try {
@@ -48,10 +51,23 @@ const validateGuess = (clickedName) => {
     const matchedCountry = data.find(country => country.name.common === clickedName);
     if (matchedCountry && clickedName === currentCountryName) {
         alert("Helyes válasz!");
-       getRandomCountryName(data); 
+        score++;  // Helyes válasz esetén növeli a pontszámot
+        document.querySelector(".goodGuesses").value = score; // Frissíti a pontszámot
+        currentCountryName = getRandomCountryName(data);  // Új országot generál
     } else {
         alert("Helytelen, próbáld újra!");
     }
+};
+
+const startTimer = () => {
+    time = setInterval(() => {
+        timer--;  // Csökkenti az időt
+        document.getElementById("timer").textContent = timer;  // Frissíti az időt a képernyőn
+        if (timer <= 0) {
+            clearInterval(time);  // Leállítja a visszaszámlálót
+            alert("Az idő lejárt!");
+        }
+    }, 1000);
 };
 
 document.addEventListener("DOMContentLoaded", async () => {
@@ -59,6 +75,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     const cardsHTML = createFlagCards(data);
     renderCards(cardsHTML);
     document.querySelector(".container").addEventListener("click", (event) => {
+        if (timer === 120) {  // Ha még nem indult el a timer
+            startTimer();  // Indítja a timer-t
+        }
+
         const flagCard = event.target.closest(".flag-card");
         if (flagCard) {
             const clickedName = flagCard.dataset.name;

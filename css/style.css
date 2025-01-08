@@ -28,6 +28,25 @@ section input{
     font-size: 16px;
     padding: 6px;
 }
+.content {
+   margin: 24px 0;
+   padding: 10px;
+}
+.content input{
+    width: 60px;
+    padding: 10px;
+    font-size: 16px;
+}
+.row {
+    display: flex; 
+    align-items: center;
+}
+
+.row p {
+    margin-right: 10px;
+    font-size: 24px;
+}
+
 
 .container {
     display: grid;
